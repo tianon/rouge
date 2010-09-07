@@ -18,3 +18,7 @@ More simply, it is a remote server backup system, using git for incremental cont
 
 [git]: http://git-scm.org "Git Homepage"
 [extricate]: http://google.com/search?q=define:extricate "Definition of Extricate"
+
+# required CPAN modules
+
+* `YAML::Any` (for configuration file)
