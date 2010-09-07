@@ -12,5 +12,5 @@
 
 A remote server backup system, using git for incremental control.
 
-[git]: http://git-scm.org
+[git]: http://git-scm.org "Git Homepage"
 [extricate]: http://google.com/search?q=define:extricate "Definition of Extricate"
