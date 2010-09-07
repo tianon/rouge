@@ -1,0 +1,33 @@
+---
+hosts:
+    -
+        username: tianon
+        hostname: athena
+        include:
+            - /home/tianon
+            - /etc
+        exclude:
+# files in /etc/init.d are provided by installing software
+            - /etc/init.d
+        exempt:
+            - /etc/init.d/my_custom_init_script
+        rsync_extra: '--compress'
+    -
+        username: tianon
+        hostname: susan
+        include:
+            - /home/tianon
+            - /etc/bind
+            - /var/bind/{pri,sec}
+            - /etc/dhcp
+            - /etc/shorewall
+            - /etc/shorewall6
+            - /etc/unrealircd
+            - /etc/squid
+            - /etc/postfix
+            - /etc/ntp.conf
+            - /etc/make.conf
+            - /etc/exports
+            - /etc/cups
+            - /etc/cron*
+            - /etc/apache2
