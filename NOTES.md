@@ -13,6 +13,9 @@
 # possible future enhancements
 
 * better support for backing up git repositories (full or bare), especially local file changes
+	* this might be accomplished well by just finding any folder named `.git` and temporarily renaming it to something else (like `rouge_git`, or something), and then having some script to parse it back
+	* it might also be helpful to add a special file in the `.git` folder to help us recognize our renamed folder as a renamed `.git` folder and not just a happy coincidence (although we could just keep that as an "intentional limitation" to keep things simple)
+	* also, files like `.gitignore` definitely need to be renamed, so they don't conflict (so really, all of `.git*` needs to be renamed to `rouge_git*`)
 * saving metadata (such as file owners)
 * some way to easily restore files when a system which has died is "resurrected" (would require saving metadata)
 * support for MongoDB databases
