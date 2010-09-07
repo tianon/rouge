@@ -9,6 +9,7 @@
 		* which files to backup (including exclusions[`--exclude=PATTERN` - exclude files matching PATTERN] and exemptions[`--include=PATTERN` - don't exclude files matching PATTERN])
 		* [optional] extra `rsync` flags, such as `-z`/`--compress`
 * default `rsync` options: `-vh -aP --delete --delete-excluded` (followed by the optional extra flags specified per-host)
+* don't backup a rouge backups directory (detected by some hidden file, like `.rouge_backupLocation`), unless the configuration block for the host specifies that we should
 
 # possible future enhancements
 
