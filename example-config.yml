@@ -1,8 +1,8 @@
 ---
+backupLocation: /var/lib/rouge
 hosts:
-    -
+    -   hostname: athena
         username: tianon
-        hostname: athena
         include:
             - /home/tianon
             - /etc
@@ -11,10 +11,9 @@ hosts:
             - /etc/init.d
         exempt:
             - /etc/init.d/my_custom_init_script
-        rsync_extra: '--compress'
-    -
+        rsyncExtra: '--compress'
+    -   hostname: susan
         username: tianon
-        hostname: susan
         include:
             - /home/tianon
             - /etc/bind

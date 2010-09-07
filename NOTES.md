@@ -12,6 +12,7 @@
 
 # possible future enhancements
 
+* better support for backing up git repositories (full or bare), especially local file changes
 * saving metadata (such as file owners)
 * some way to easily restore files when a system which has died is "resurrected" (would require saving metadata)
 * support for MongoDB databases
