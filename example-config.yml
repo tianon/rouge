@@ -1,7 +1,7 @@
 ---
 backupLocation: /var/lib/rouge
 hosts:
-    -   hostname: athena
+    -   alias: athena
         username: tianon
         include:
             - /home/tianon
@@ -13,8 +13,7 @@ hosts:
             - /etc/init.d/my_custom_init_script
         rsyncExtra: '--compress'
         
-    -   alias: firewall
-        hostname: susan
+    -   hostname: susan
         username: tianon
         privkey: /home/tianon/.ssh/alternate_id_dsa
         include:
