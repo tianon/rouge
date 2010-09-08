@@ -18,6 +18,8 @@
 	* it might also be helpful to add a special file in the `.git` folder to help us recognize our renamed folder as a renamed `.git` folder and not just a happy coincidence (although we could just keep that as an "intentional limitation" to keep things simple)
 	* also, files like `.gitignore` definitely need to be renamed, so they don't conflict (so really, all of `.git*` needs to be renamed to `rouge_git*`)
 * saving metadata (such as file owners) -- [metastore][metastore]?
+* saving hard links (much more difficult to do; might want to look at information about how rsync detects them)
+	* could be done by using `--hard-links` in rsync, then by checking inode numbers and keeping a separate list of files which need to be hardlinked, only backing up one of them and having whatever restore process gets created recreate them properly
 * some way to easily restore files when a system which has died is "resurrected" (would obviously require saving metadata)
 * support for databases (MongoDB, MySQL, etc.)
 
