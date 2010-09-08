@@ -62,31 +62,23 @@ sub loadConfig {
 	return $self;
 }
 
-sub performBackup {
+sub steal {
 	my $self = shift;
-	my @filters = @_;
+	my @filters = grep { defined $_ && $_ ne '' } @_;
 	
 	my @hosts = grep {
 		return 1 unless @filters; # no filters means match everything
 		
-		my $hostname = Rouge::DataHelper::hostname($_);
-		my $username = Rouge::DataHelper::username($_);
-		my $userAtHost = Rouge::DataHelper::userAtHost($_);
-		my $alias = Rouge::DataHelper::alias($_);
-		
 		for my $filter (@filters) {
-			if (
-				$filter eq $hostname
-				|| $filter eq $username
-				|| $filter eq $userAtHost
-				|| $filter eq $alias
-			) {
-				return 1;
-			}
+			return 1 if Rouge::DataHelper::hostMatchesFilter($_, $filter);
 		}
 		
 		return 0;
 	} @{ $self->{config}{hosts} };
+	
+	# TODO backup @hosts
+	use Data::Dumper;
+	print Dumper(@hosts);
 	
 	return $self;
 }

@@ -14,6 +14,7 @@ hosts:
         rsyncExtra: '--compress'
     -   hostname: susan
         username: tianon
+        privkey: /home/tianon/.ssh/alternate_id_dsa
         include:
             - /home/tianon
             - /etc/bind

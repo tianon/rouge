@@ -4,6 +4,25 @@ use warnings;
 
 package Rouge::DataHelper;
 
+sub hostMatchesFilter {
+	my $host = shift || {};
+	my $filter = shift;
+	
+	return 0 unless $filter;
+	
+	my $hostname = hostname($host);
+	my $username = username($host);
+	my $userAtHost = userAtHost($host);
+	my $alias = alias($host);
+	
+	return (
+		$filter eq $hostname
+		|| $filter eq $username . '@'
+		|| $filter eq $userAtHost
+		|| $filter eq $alias
+	);
+}
+
 sub hostname {
 	my $host = shift || {};
 	
