@@ -4,6 +4,10 @@ use warnings;
 
 package Rouge;
 
+use File::Basename qw(dirname);
+use lib dirname(__FILE__);
+
+use Rouge::DataHelper;
 use YAML::Any ();
 
 our $defaultConfig = {
@@ -30,7 +34,7 @@ sub new {
 		$self->$func(@args);
 	}
 	
-	return bless($self, $class);
+	return $self;
 }
 
 sub reset_config {
@@ -54,6 +58,35 @@ sub load_config {
 			$self->{config}{$key} = $config->{$key};
 		}
 	}
+	
+	return $self;
+}
+
+sub perform_backup {
+	my $self = shift;
+	my @filters = @_;
+	
+	my @hosts = grep {
+		return 1 unless @filters; # no filters means match everything
+		
+		my $hostname = Rouge::DataHelper::hostname($_);
+		my $username = Rouge::DataHelper::username($_);
+		my $userAtHost = Rouge::DataHelper::userAtHost($_);
+		my $alias = Rouge::DataHelper::alias($_);
+		
+		for my $filter (@filters) {
+			if (
+				$filter eq $hostname
+				|| $filter eq $username
+				|| $filter eq $userAtHost
+				|| $filter eq $alias
+			) {
+				return 1;
+			}
+		}
+		
+		return 0;
+	} @{ $self->{config}{hosts} };
 	
 	return $self;
 }
