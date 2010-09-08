@@ -37,7 +37,7 @@ sub new {
 	return $self;
 }
 
-sub reset_config {
+sub resetConfig {
 	my $self = shift;
 	
 	$self->{config} = $defaultConfig;
@@ -45,14 +45,14 @@ sub reset_config {
 	return $self;
 }
 
-sub load_config {
+sub loadConfig {
 	my $self = shift;
 	my $filename = shift;
 	my $resetConfig = shift || 0;
 	
 	my ($config) = YAML::Any::LoadFile($filename);
 	if ($config) {
-		$self->reset_config if $resetConfig;
+		$self->resetConfig if $resetConfig;
 		
 		for my $key (keys %$config) {
 			$self->{config}{$key} = $config->{$key};
@@ -62,7 +62,7 @@ sub load_config {
 	return $self;
 }
 
-sub perform_backup {
+sub performBackup {
 	my $self = shift;
 	my @filters = @_;
 	
