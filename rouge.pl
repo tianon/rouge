@@ -23,6 +23,7 @@ sub usage {
 }
 
 my $config = dirname(__FILE__) . '/config.yml';
+
 GetOptions(
 	'c|config=s' => \$config,
 ) or usage;
@@ -31,4 +32,4 @@ my $rouge = Rouge->new(
 	loadConfig => [ $config, 1 ],
 );
 
-Rouge::steal(@ARGV);
+$rouge->steal(@ARGV);

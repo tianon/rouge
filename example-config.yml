@@ -12,7 +12,9 @@ hosts:
         exempt:
             - /etc/init.d/my_custom_init_script
         rsyncExtra: '--compress'
-    -   hostname: susan
+        
+    -   alias: firewall
+        hostname: susan
         username: tianon
         privkey: /home/tianon/.ssh/alternate_id_dsa
         include:

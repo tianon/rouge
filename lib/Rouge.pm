@@ -67,13 +67,18 @@ sub steal {
 	my @filters = grep { defined $_ && $_ ne '' } @_;
 	
 	my @hosts = grep {
-		return 1 unless @filters; # no filters means match everything
+		my $ret = 1;
+		
+		$ret = 0 if @filters; # no filters means match everything
 		
 		for my $filter (@filters) {
-			return 1 if Rouge::DataHelper::hostMatchesFilter($_, $filter);
+			if (Rouge::DataHelper::hostMatchesFilter($_, $filter)) {
+				$ret = 1;
+				next;
+			}
 		}
 		
-		return 0;
+		$ret;
 	} @{ $self->{config}{hosts} };
 	
 	# TODO backup @hosts
