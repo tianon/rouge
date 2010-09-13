@@ -1,15 +1,21 @@
 ---
 backupLocation: /var/lib/rouge
+rsync: /usr/bin/rsync
+git: /usr/bin/git
 hosts:
     -   alias: athena
         username: tianon
         include:
-            - /home/tianon
-            - /etc
+            - /home/tianon/
+            - /home/tianon/.cpan/CPAN/MyConfig.pm
+#            - /etc/
         exclude:
+            - /home/tianon/.*/
 # files in /etc/init.d are provided by installing software
-            - /etc/init.d
+            - /etc/init.d/
         exempt:
+            - /home/tianon/.xkb/
+            - /home/tianon/.ssh/
             - /etc/init.d/my_custom_init_script
         rsyncExtra: '--hard-links'
         
@@ -17,19 +23,20 @@ hosts:
         username: tianon
         privkey: /home/tianon/.ssh/alternate_id_dsa
         include:
-            - /home/tianon
-            - /etc/bind
-            - /var/bind/{pri,sec}
-            - /etc/dhcp
-            - /etc/shorewall
-            - /etc/shorewall6
-            - /etc/unrealircd
-            - /etc/squid
-            - /etc/postfix
+            - /home/tianon/
+            - /etc/bind/
+            - /var/bind/{pri,sec}/
+            - /etc/dhcp/
+            - /etc/shorewall/
+            - /etc/shorewall6/
+            - /etc/unrealircd/
+            - /etc/squid/
+            - /etc/postfix/
             - /etc/ntp.conf
             - /etc/make.conf
             - /etc/exports
-            - /etc/cups
-            - /etc/cron*
-            - /etc/apache2
+            - /etc/cups/
+            - /etc/crontab
+            - /etc/cron*/
+            - /etc/apache2/
         rsyncExtra: '--compress'

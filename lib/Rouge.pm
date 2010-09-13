@@ -8,10 +8,14 @@ use File::Basename qw(dirname);
 use lib dirname(__FILE__);
 
 use Rouge::DataHelper;
-use YAML::Any ();
+use YAML::Any qw();
+use File::Temp qw(tempfile);
 
 our $defaultConfig = {
 	backupLocation => '/var/lib/rouge',
+	rsync => 'rsync',
+	git => 'git',
+	rsyncDefault => '-aRvh --delete --delete-excluded',
 	hosts => [],
 };
 
@@ -55,9 +59,43 @@ sub loadConfig {
 		$self->resetConfig if $resetConfig;
 		
 		for my $key (keys %$config) {
-			$self->{config}{$key} = $config->{$key};
+			$self->{config}{$key} = $config->{$key} || $self->{config}{$key};
 		}
 	}
+	
+	return $self;
+}
+
+sub stealOneHost {
+	my $self = shift;
+	my $host = shift;
+	
+	my $alias = Rouge::DataHelper::alias($host);
+	
+	my $backupLocation = $self->{config}{backupLocation} || $defaultConfig->{backupLocation};
+	my $currentHostDir = "$backupLocation/$alias";
+	
+	system 'mkdir', '-p', $currentHostDir and die "error: cannot create $currentHostDir";
+	
+	unless (-d "$currentHostDir/.git") {
+		system $self->{config}{git} || $defaultConfig->{git}, 'init', $currentHostDir and die "error: cannot git init";
+	}
+	
+	my $rsync = Rouge::DataHelper::rsync($host, $self->{config}{rsync}, $self->{config}{rsyncDefault}, $currentHostDir);
+	
+	my $output = qx{($rsync) 2>&1};
+	
+	chdir $currentHostDir or die "error: cannot chdir to $currentHostDir: $!";
+	
+	system $self->{config}{git} || $defaultConfig->{git}, 'add', '-A' and die "error: cannot git add";
+	
+	my ($tempFh, $tempFile) = tempfile();
+	print {$tempFh} $output;
+	close $tempFh;
+	
+	system $self->{config}{git} || $defaultConfig->{git}, 'commit', '-F', $tempFile and warn "warning: cannot git commit";
+	
+	unlink $tempFile or die "error: cannot unlink temporary commit file $tempFile: $!";
 	
 	return $self;
 }
@@ -81,9 +119,11 @@ sub steal {
 		$ret;
 	} @{ $self->{config}{hosts} };
 	
-	# TODO backup @hosts
 	use Data::Dumper;
-	print Dumper(@hosts);
+	for my $host (@hosts) {
+		print Dumper($host);
+		$self->stealOneHost($host);
+	}
 	
 	return $self;
 }

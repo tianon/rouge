@@ -50,4 +50,31 @@ sub alias {
 	return $host->{alias} || userAtHost($host);
 }
 
+sub rsync {
+	my $host = shift || {};
+	my $rsync = shift || $Rouge::defaultConfig->{rsync};
+	my $rsyncDefault = shift || $Rouge::defaultConfig->{rsyncDefault};
+	my $backupLocation = shift || $Rouge::defaultConfig->{backupLocation} . '/' . alias($host);
+	
+	my $rsyncExtra = $host->{rsyncExtra} || '';
+	
+	$rsync .= ' ' . $rsyncDefault . ' ' . $rsyncExtra;
+	
+	my @include = @{ $host->{include} || [] };
+	my @exclude = @{ $host->{exclude} || [] };
+	my @exempt = @{ $host->{exempt} || [] };
+	
+	my $userAtHost = userAtHost($host);
+	
+	$rsync .= ' ' . join ' ', map { '--include="' . $_ . '"' } @exempt;
+	
+	$rsync .= ' ' . join ' ', map { '--exclude="' . $_ . '"' } @exclude;
+	
+	$rsync .= ' ' . join ' ', map { '"' . $userAtHost . ':' . $_ . '"' } @include;
+	
+	$rsync .= ' "' . $backupLocation . '"';
+	
+	return $rsync;
+}
+
 1;
